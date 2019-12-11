@@ -1,0 +1,43 @@
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"strings"
+	"strconv"
+)
+
+	
+func check(e error) {
+    if e != nil {
+        panic(e)
+    }
+}
+
+
+func calc(collection []string)  int{
+	var res int
+	res = 0
+	for _,s := range collection {
+		dat,_ := strconv.Atoi(s)
+		for dat > 0 {
+			dat = dat/3 -2
+			if dat>0 {
+				res += dat
+			}
+		}
+	}
+	return res
+}
+
+
+func main() {
+	dat,err := ioutil.ReadFile("./input.txt")
+	check(err)
+
+	list := string(dat)
+	collection := strings.Split(list, "\n")
+	result := calc(collection)
+	fmt.Println(result)
+
+}
