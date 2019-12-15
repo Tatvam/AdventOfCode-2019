@@ -23,11 +23,11 @@ func opr(a int) (int,int,int) {
 	r = a%10
 	return op,p,r
 }
-func cac(d []int, p int, i int) int {
+func cac(d []int, op int,p int) int {
 	if p == 1 {
-		return d[i]
+		return op
 	}
-	return d[d[i]]
+	return d[op]
 
 }
 func calc(collection []string) {
@@ -38,51 +38,64 @@ func calc(collection []string) {
 		dat,_ := strconv.Atoi(s)
 		d = append(d,dat)
 	}
-//	fmt.Println(d)
 	i:=0
 	for {
 		opcode,p1,p2 := opr(d[i])
-		fmt.Println(opcode,p1,p2)
 		if opcode == 99 {
-			break;
+			break
 		}
 		if opcode == 1 {
-			d[d[i+3]] = cac(d,p1,i+1) + cac(d,p2,i+2) 
+			op1,op2,op3 := d[i+1],d[i+2],d[i+3]
+			if op3 == 677 {
+				fmt.Println(cac(d,op1,p1) + cac(d,op2,p2))
+			}
+			d[op3] = cac(d,op1,p1) + cac(d,op2,p2) 
 			i+=4
 		} else if opcode == 2 {
-			d[d[i+3]] = cac(d,p1,i+1) * cac(d,p2,i+2)  
+			op1,op2,op3 := d[i+1],d[i+2],d[i+3]
+			if op3 == 677 {
+				fmt.Println(cac(d,op1,p1) * cac(d,op2,p2))
+			}
+			d[op3] = cac(d,op1,p1) * cac(d,op2,p2) 
 			i+=4
 		} else if opcode == 3 {
 			d[d[i+1]] = input
 			i+=2
 		} else if opcode == 4 {
-			fmt.Println(d[d[i+1]])
+			op1 := d[i+1]
+			fmt.Println(cac(d,op1,p1))
 			i+=2
 		} else if opcode == 5 {
-			if cac(d,p1,i+1) > 0 {
-				i = cac(d,p2,i+2)
+			op1,op2 := d[i+1],d[i+2]
+			if cac(d,op1,p1) != 0 {
+				i = cac(d,op2,p2)
+				
 			} else {
 				i+=3
 			}
 		}  else if opcode == 6 {
-			if cac(d,p1,i+1)  == 0 {
-				i = cac(d,p2,i+2)
+			op1,op2 := d[i+1],d[i+2]
+			if cac(d,op1,p1) == 0 {
+				i = cac(d,op2,p2)
 			} else {
 				i+=3
 			}
 		}  else if opcode == 7 {
-			if cac(d,p1,i+1) < cac(d,p2,i+2) {
-				d[d[i+3]] = 1
+			op1,op2,op3 := d[i+1],d[i+2],d[i+3]
+			if cac(d,op1,p1) < cac(d,op2,p2) {
+				d[op3] = 1
 			}else {
-				d[d[i+3]] = 0
+				d[op3] = 0
 			}
 			i+=4
 
 		}  else if opcode == 8 {
-			if cac(d,p1,i+1) == cac(d,p2,i+2) {
-				d[d[i+3]] = 1
+			op1,op2,op3 := d[i+1],d[i+2],d[i+3]
+
+			if cac(d,op1,p1) == cac(d,op2,p2) {
+				d[op3] = 1
 			}else {
-				d[d[i+3]] = 0
+				d[op3] = 0
 			}
 			i+=4
 		}
