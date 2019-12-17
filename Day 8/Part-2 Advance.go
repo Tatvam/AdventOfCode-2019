@@ -5,6 +5,8 @@ import (
 	"github.com/labstack/gommon/color"
 	"io/ioutil"
 	"strconv"
+	tm "github.com/buger/goterm"
+    "time"
 	//"time"
 )
 
@@ -32,61 +34,51 @@ func main() {
 	}
 	//layers := [][]strings{}
 	reverse(collection)
-
+	tm.Clear() 
 	currLayer := []int{}
 	for _,s := range collection[0] {
 		d,_ := strconv.Atoi(string(s))
 		currLayer = append(currLayer, d)
 	}
 
-	// i,j := 0,0
-	// for i < 6 {
-	// 	j = 0
-	// 	for j < 25 {
-	// 		if currLayer[25*i+j] == 0 {
-	// 			color.Printf(color.BlackBg("  "))
-	// 		} else if currLayer[25*i+j] == 1 {
-	// 			color.Printf(color.RedBg("  "))
-	// 		} else {
-	// 			color.Printf(color.BlueBg("  "))
-	// 		}
-	// 		j++
-	// 	}
-	// 	i++
-	// 	fmt.Println("\n")
-	// }
+	i,j := 0,0
+	for i < 6 {
+		j = 0
+		for j < 25 {
+			tm.MoveCursor(j + 1, i + 1 )
+			if currLayer[25*i+j] == 2 {
+				tm.Printf(color.BlackBg(" "))
+			} else if currLayer[25*i+j] == 1 {
+				tm.Printf(color.RedBg(" "))
+			} else {
+				tm.Printf(color.WhiteBg(" "))
+			}
+			j++
+			time.Sleep(time.Second/100)
+			tm.Flush()
+		}
+		i++
+		fmt.Println("\n")
+	}
 
 	for _,layer := range collection {
 		i,j := 0,0
 		for i < 6 {
 			j = 0
 			for j < 25 {
+				tm.MoveCursor(j + 1, i + 1 )
 				if layer[25*i+j] == '2' {
 				} else if layer[25*i+j] == '1' {
-					currLayer[25*i+j] = 1
+					tm.Printf(color.RedBg(" "))
 				} else {
-					currLayer[25*i+j] = 0
+					tm.Printf(color.WhiteBg(" "))
 				}
 				j++
+				time.Sleep(time.Second/1000)
+				tm.Flush()
 			}
 			i++
 		}
-	}
-	i,j := 0,0
-	for i < 6 {
-		j = 0
-		for j < 25 {
-			if currLayer[25*i+j] == 0 {
-				fmt.Printf(color.BlackBg("  "))
-			} else if currLayer[25*i+j] == 1 {
-				fmt.Printf(color.RedBg("  "))
-			} else {
-				fmt.Printf(color.WhiteBg("  "))
-			}
-			j++
-		}
-		i++
-		fmt.Println("\n")
 	}
 
 }
